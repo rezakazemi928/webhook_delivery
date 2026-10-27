@@ -37,6 +37,10 @@ func run() error {
 	defer sqlDB.Close()
 
 	log.Println("Connected to PostgreSQL")
+	if err := postgres.Migrate(db.WithContext(ctx)); err != nil {
+		return fmt.Errorf("migrate database: %w", err)
+	}
+
 	addr := os.Getenv("HTTP_ADDR")
 	if addr == "" {
 		addr = ":8080"
